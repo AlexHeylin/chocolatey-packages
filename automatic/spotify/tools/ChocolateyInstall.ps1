@@ -21,13 +21,12 @@ schtasks.exe /Run /TN $arguments['packageName']
 Start-Sleep -s 1
 schtasks.exe /Delete /TN $arguments['packageName'] /F
 
-# Wait for Spotify to start, then kill it
-$done = $false
-do {
+# Wait 120 seconds for Spotify to start so we can kill it
+for ($i=1; $i -le 12; $i++) {
   if (Get-Process Spotify -ErrorAction SilentlyContinue) {
     Stop-Process -name Spotify
-    $done = $true
+    break
   }
 
   Start-Sleep -s 10
-} until ($done)
+}
